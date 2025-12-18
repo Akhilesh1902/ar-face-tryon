@@ -77,7 +77,7 @@ const FaceMesh: React.FC = () => {
       requestAnimationFrame(detect);
       return;
     }
-    // eslint-disable-next-line react-hooks/immutability
+
     lastTime = time;
     if (
       !detectorRef.current ||
@@ -122,9 +122,11 @@ const FaceMesh: React.FC = () => {
     init();
 
     return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       const stream = videoRef.current?.srcObject as MediaStream | null;
       stream?.getTracks().forEach((t) => t.stop());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
