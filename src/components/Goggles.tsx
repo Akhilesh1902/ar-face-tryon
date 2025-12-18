@@ -7,7 +7,11 @@ export function Goggles() {
   const ref = useRef<THREE.Group>(null);
 
   useFrame(() => {
-    if (!ref.current || !faceStore.transform.visible) return;
+    if (!ref.current) return;
+
+    ref.current.visible = faceStore.transform.visible;
+
+    if (!faceStore.transform.visible) return;
 
     const { position, rotation, scale } = faceStore.transform;
     // console.log(faceStore.transform);

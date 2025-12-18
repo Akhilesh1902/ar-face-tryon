@@ -10,7 +10,8 @@ import { Goggles } from "./Goggles";
 export default function Scene() {
   return (
     <Canvas
-      camera={{ position: [0, 1.5, 3], fov: 45 }}
+      // camera={{ position: [0, 1.5, 3], fov: 45 }}
+      camera={{ zoom: 200, position: [0, 0, 5] }}
       gl={{ antialias: true }}>
       <ambientLight intensity={0.6} />
       <directionalLight

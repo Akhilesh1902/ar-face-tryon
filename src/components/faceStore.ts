@@ -31,7 +31,7 @@ export function updateFaceStore(
   const leftEye = face.keypoints[33];
   const rightEye = face.keypoints[263];
   const nose = face.keypoints[1];
-
+  // console.log({ leftEye });
   // ---------- Position (Normalized -1 to 1) ----------
   const centerX = (leftEye.x + rightEye.x) / 2;
   const centerY = (leftEye.y + rightEye.y) / 2;
@@ -57,13 +57,26 @@ export function updateFaceStore(
   const roll = -Math.atan2(rightEye.y - leftEye.y, rightEye.x - leftEye.x);
   // Face center
   const eyeCenterX = (leftEye.x + rightEye.x) / 2;
-  const eyeCenterY = (leftEye.y + rightEye.y) / 2;
+  // const eyeCenterY = (leftEye.y + rightEye.y) / 2;
 
   // Yaw (look left/right)
   const yaw = ((nose.x - eyeCenterX) / videoWidth) * Math.PI;
 
   // Pitch (look up/down)
-  const pitch = ((nose.y - eyeCenterY) / videoHeight) * Math.PI;
+  // const pitch = ((nose.y - eyeCenterY) / videoHeight) * Math.PI;
+
+  const forehead = face.keypoints[10];
+  const chin = face.keypoints[152];
+
+  /**
+   * MediaPipe z:
+   * - negative = closer to camera
+   * - positive = farther
+   */
+  const depthDiff = chin.z! - forehead.z!;
+
+  // Normalize by face size (eye distance gives scale invariance)
+  const pitch = THREE.MathUtils.clamp(depthDiff / eyeDistance, -0.6, 0.6) * 0.5;
 
   // IMPORTANT: order is X (pitch), Y (yaw), Z (roll)
   faceStore.transform.rotation.set(pitch, yaw * 2, roll);
